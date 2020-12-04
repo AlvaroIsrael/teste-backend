@@ -1,43 +1,55 @@
 import { getRepository } from 'typeorm';
-import User from '../models/User';
 import AppError from '../errors/AppError';
-import { hash } from 'bcryptjs';
+import Rating from '../models/Rating';
+import User from '../models/User';
+import Movie from '../models/Movie';
 
 interface IRequest {
-  name: string,
-  email: string,
-  password: string,
-  role: string;
+  userId: string,
+  movieId: string,
+  userRole: string,
+  score: number,
 }
 
+const between = (x: number, min: number, max: number) => {
+  return x >= min && x <= max;
+};
+
 class RateMovieService {
-  public async execute({ name, email, password, role }: IRequest): Promise<number> {
-    const usersRepository = getRepository(User);
-
-    const emailExists = await usersRepository.findOne({
-      where: { email },
-    });
-
-    if (emailExists) {
-      throw new AppError('Email address already taken.');
+  public async execute({ userId, userRole, movieId, score }: IRequest): Promise<Rating> {
+    if (!(userRole != 'admin')) {
+      throw new AppError('Only a default users can rate a movie.');
     }
 
-    const hashedPassword = await hash(password, 8);
+    if (!between(score, 0, 4)) {
+      throw new AppError('Score must be a number between 0 and 4.');
+    }
 
-    const user = usersRepository.create({
-      name, email, password: hashedPassword, role, active: 1,
+    const moviesRepository = getRepository(Movie);
+
+    const movie = await moviesRepository.findOne({
+      where: { id: movieId },
     });
 
-    await usersRepository.save(user);
+    if (!movie) {
+      throw new AppError('This movies does not exist in the database.');
+    }
 
-    delete user.name;
-    delete user.email;
-    delete user.password;
-    delete user.role;
-    delete user.active;
-    delete user.updated_at;
+    const usersRepository = getRepository(Rating);
 
-    return user;
+    const rating = usersRepository.create({
+      user_id: userId,
+      movie_id: movieId,
+      score,
+    });
+
+    await usersRepository.save(rating);
+
+    delete rating.user_id;
+    delete rating.movie_id;
+    delete rating.updated_at;
+
+    return rating;
   }
 }
 

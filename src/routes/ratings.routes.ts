@@ -9,22 +9,21 @@ const ratingsRouter = Router();
 ratingsRouter.post('/:score', ensureAuthenticated, async (request, response) => {
   const score = request.params.score;
   const userRole = request.user.role;
-
-  if (!(request.user.role != 'admin')) {
-    return response.status(StatusCodes.UNAUTHORIZED).json({
-      erro: 'Only a default users can rate a movie.',
-    });
-  }
+  const userId = request.user.id;
+  const { movieId } = request.body;
 
   const rateMovie = new RateMovieService();
 
   try {
-    const movie = await rateMovie.execute({
-      title, director, genre, actors, plot, language, country,
-    });
+    const userScore = parseFloat(score);
+
+    const movie = await rateMovie.execute({ userId, userRole, movieId, score: userScore });
 
     return response.status(StatusCodes.OK).json(movie);
   } catch (e) {
+    if (e.message == 'Only a default users can rate a movie.') {
+      return response.status(StatusCodes.UNAUTHORIZED).json({ erro: e.message });
+    }
     return response.status(StatusCodes.BAD_REQUEST).json({ erro: e.message });
   }
 });

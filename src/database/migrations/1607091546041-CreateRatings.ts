@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export default class CreateMovies1606954094596 implements MigrationInterface {
+export default class CreateRatings1607091546041 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'movies',
+        name: 'ratings',
         columns: [
           {
             name: 'id',
@@ -15,32 +15,16 @@ export default class CreateMovies1606954094596 implements MigrationInterface {
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'title',
+            name: 'user_id',
             type: 'varchar',
           },
           {
-            name: 'director',
+            name: 'movie_id',
             type: 'varchar',
           },
           {
-            name: 'genre',
-            type: 'varchar',
-          },
-          {
-            name: 'actors',
-            type: 'varchar',
-          },
-          {
-            name: 'plot',
-            type: 'varchar',
-          },
-          {
-            name: 'language',
-            type: 'varchar',
-          },
-          {
-            name: 'country',
-            type: 'varchar',
+            name: 'score',
+            type: 'numeric',
           },
           {
             name: 'created_at',
@@ -58,6 +42,6 @@ export default class CreateMovies1606954094596 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('movies');
+    await queryRunner.dropTable('ratings');
   }
 }
