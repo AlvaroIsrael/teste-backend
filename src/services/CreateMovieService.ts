@@ -5,7 +5,7 @@ import AppError from '../errors/AppError';
 interface IRequest {
   title: string,
   director: string,
-  genre: string,
+  genres: string,
   actors: string,
   plot: string,
   language: string,
@@ -13,7 +13,7 @@ interface IRequest {
 }
 
 class CreateUserService {
-  public async execute({ title, director, genre, actors, plot, language, country }: IRequest): Promise<Movie> {
+  public async execute({ title, director, genres, actors, plot, language, country }: IRequest): Promise<Movie> {
     const movieRepository = getRepository(Movie);
 
     const movieExists = await movieRepository.findOne({
@@ -25,7 +25,7 @@ class CreateUserService {
     }
 
     const movie = movieRepository.create({
-      title, director, genre, actors, plot, language, country,
+      title, director, genres, actors, plot, language, country,
     });
 
     await movieRepository.save(movie);

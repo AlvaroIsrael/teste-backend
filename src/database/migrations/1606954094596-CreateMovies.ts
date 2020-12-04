@@ -23,7 +23,7 @@ export default class CreateMovies1606954094596 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'genre',
+            name: 'genres',
             type: 'varchar',
           },
           {

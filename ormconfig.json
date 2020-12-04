@@ -6,7 +6,8 @@
   "password": "docker",
   "database": "imdb",
   "entities": [
-    "./src/models/*.ts"
+    "./src/models/*.ts",
+    "../../bin/src/models/*.js"
   ],
   "migrations": [
     "./src/database/migrations/*.ts"

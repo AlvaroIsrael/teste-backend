@@ -3,19 +3,27 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
+  UpdateDateColumn, PrimaryColumn, ManyToOne, JoinColumn,
 } from 'typeorm';
+import User from './User';
+import Movie from './Movie';
 
 @Entity('ratings')
 class Rating {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @PrimaryColumn()
   user_id?: string;
+  @ManyToOne(() => User, user => user.ratings)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
-  @Column()
+  @PrimaryColumn()
   movie_id?: string;
+  @ManyToOne(() => Movie, movie => movie.ratings)
+  @JoinColumn({ name: 'movie_id' })
+  movie: Movie;
 
   @Column('numeric')
   score?: number;

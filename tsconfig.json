@@ -71,6 +71,8 @@
     "emitDecoratorMetadata": true,
     /* Enables experimental support for emitting type metadata for decorators. */
 
+    "inlineSources": true,
+    "sourceMap": true,
     /* Advanced Options */
     "skipLibCheck": true
     /* Skip type checking of declaration files. */,

@@ -3,8 +3,9 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
+  UpdateDateColumn, OneToMany,
 } from 'typeorm';
+import Rating from './Rating';
 
 @Entity('movies')
 class Movie {
@@ -18,7 +19,7 @@ class Movie {
   director?: string;
 
   @Column('varchar')
-  genre?: string;
+  genres?: string;
 
   @Column('varchar')
   actors?: string;
@@ -37,6 +38,11 @@ class Movie {
 
   @UpdateDateColumn()
   updated_at?: Date;
+
+  @OneToMany(() => Rating, rating => rating.movie)
+  ratings?: Rating[];
+
+  average?: number;
 }
 
 export default Movie;
