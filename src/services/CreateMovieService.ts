@@ -12,7 +12,7 @@ interface IRequest {
   country: string;
 }
 
-class CreateUserService {
+class CreateMovieService {
   public execute = async ({ title, director, genres, actors, plot, language, country }: IRequest): Promise<Movie> => {
     const movieRepository = getRepository(Movie);
 
@@ -40,4 +40,4 @@ class CreateUserService {
   };
 }
 
-export default CreateUserService;
+export default CreateMovieService;

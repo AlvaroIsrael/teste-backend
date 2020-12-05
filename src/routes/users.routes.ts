@@ -26,16 +26,16 @@ usersRouter.post('/', async (request, response) => {
 usersRouter.put('/:id', ensureAuthenticated, async (request, response) => {
   const { id } = request.params;
   const currentUserRole = request.user.role;
-  const { name, email, password, role } = request.body;
+  const { name, password, role } = request.body;
 
   const updateUser = new UpdateUserService();
 
   try {
-    await updateUser.execute({ id, name, email, password, role, currentUserRole });
+    await updateUser.execute({ id, name, password, role, currentUserRole });
 
     return response.status(StatusCodes.NO_CONTENT).json();
   } catch (e) {
-    if (e.message == 'Only admin can update roles.') {
+    if (e.message === 'Only admin can update roles.') {
       return response.status(StatusCodes.UNAUTHORIZED).json({ erro: e.message });
     }
     return response.status(StatusCodes.BAD_REQUEST).json({ erro: e.message });

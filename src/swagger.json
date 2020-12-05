@@ -1,0 +1,369 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Imdb api.",
+    "version": "0.1.0",
+    "title": "Imdb Api",
+    "termsOfService": "https://github.com/AlvaroIsrael/teste-backend/blob/master/README.md",
+    "contact": {
+      "email": "israel.nunes.leite@gmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/AlvaroIsrael/teste-backend/blob/master/LICENCE.md"
+    }
+  },
+  "securityDefinitions": {
+    "JWT": {
+      "description": "",
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "host": "localhost:3333",
+  "basePath": "/api/v1",
+  "schemes": ["http"],
+  "definitions": {
+    "New Movie": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "5e4f439d-e3d3-45e3-853c-ce76fd6d5b0d"
+        },
+        "title": {
+          "type": "string",
+          "example": "Avengers: Endgame"
+        },
+        "director": {
+          "type": "string",
+          "example": "Anthony Russo, Joe Russo"
+        },
+        "genres": {
+          "type": "string",
+          "example": "Action, Adventure, Fantasy, Sci-Fi"
+        },
+        "actors": {
+          "type": "string",
+          "example": "Bradley Cooper, Brie Larson, Chris Hemsworth"
+        },
+        "plot": {
+          "type": "string",
+          "example": "After the devastating events of Avengers: Infinity War, the universe is in ruins."
+        },
+        "language": {
+          "type": "string",
+          "example": "English"
+        },
+        "country": {
+          "type": "string",
+          "example": "USA"
+        },
+        "created_at": {
+          "type": "string",
+          "example": "2020-12-05T23:39:15.672Z"
+        },
+        "updated_at": {
+          "type": "string",
+          "example": "2020-12-05T23:39:15.672Z"
+        }
+      }
+    },
+
+    "Movie": {
+      "required": ["title", "director", "genres", "actors", "plot", "language", "country"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Avengers: Endgame"
+        },
+        "director": {
+          "type": "string",
+          "example": "Anthony Russo, Joe Russo"
+        },
+        "genres": {
+          "type": "string",
+          "example": "Action, Adventure, Fantasy, Sci-Fi"
+        },
+        "actors": {
+          "type": "string",
+          "example": "Bradley Cooper, Brie Larson, Chris Hemsworth"
+        },
+        "plot": {
+          "type": "string",
+          "example": "After the devastating events of Avengers: Infinity War, the universe is in ruins."
+        },
+        "language": {
+          "type": "string",
+          "example": "English"
+        },
+        "country": {
+          "type": "string",
+          "example": "USA"
+        }
+      }
+    },
+
+    "Default User": {
+      "required": ["name", "email", "password", "role"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Moltendrifter Guardian"
+        },
+        "email": {
+          "type": "string",
+          "example": "moltendrifter@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "mysupersecurepassword"
+        },
+        "role": {
+          "type": "string",
+          "example": "deafult"
+        }
+      }
+    },
+
+    "User": {
+      "required": ["name", "email", "password", "role"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Moltendrifter Guardian"
+        },
+        "email": {
+          "type": "string",
+          "example": "moltendrifter@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "mysupersecurepassword"
+        },
+        "role": {
+          "type": "string",
+          "example": "admin"
+        }
+      }
+    },
+
+    "Update User": {
+      "required": ["name", "password", "role"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Moltendrifter Guardian"
+        },
+        "password": {
+          "type": "string",
+          "example": "mysupersecurepassword"
+        },
+        "role": {
+          "type": "string",
+          "example": "admin"
+        }
+      }
+    },
+
+    "Created User": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "d4a09fe8-3253-4e11-83c0-60369a562a63"
+        },
+        "created_at": {
+          "type": "string",
+          "example": "2020-12-06T00:05:26.376Z"
+        }
+      }
+    },
+
+    "Create User Error": {
+      "properties": {
+        "erro": {
+          "type": "string",
+          "example": "Email address already taken."
+        }
+      }
+    },
+
+    "Update User Error": {
+      "properties": {
+        "erro": {
+          "type": "string",
+          "example": "Only admin can update roles."
+        }
+      }
+    },
+
+    "Delete User Error": {
+      "properties": {
+        "erro": {
+          "type": "string",
+          "example": "Only a admin can disable a user."
+        }
+      }
+    },
+
+    "Missing Jwt": {
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "error"
+        },
+        "message": {
+          "type": "string",
+          "example": "Missing JWT token."
+        }
+      }
+    }
+  },
+  "paths": {
+    "/movies": {
+      "post": {
+        "tags": ["Movies"],
+        "summary": "Add a new movie to the database.",
+        "description": "Only users with 'admin' role, can register a new movie.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "JSON",
+            "description": "Contains a JSON with all parameters needed to create a new movie.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Movie"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a JSON with the id of the newly created movie.",
+            "schema": {
+              "$ref": "#/definitions/New Movie"
+            }
+          },
+          "404": {
+            "description": "Only users with 'admin' role, can register a new movie.",
+            "schema": {
+              "$ref": "#/definitions/Missing Jwt"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Add a new user to the database.",
+        "description": "New users can either have 'admin' or 'default' role.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "JSON",
+            "description": "Contains a JSON with all parameters needed to create a new movie.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a JSON with the id of the newly created movie.",
+            "schema": {
+              "$ref": "#/definitions/Created User"
+            }
+          },
+          "404": {
+            "description": "Cant create a user with email already used.",
+            "schema": {
+              "$ref": "#/definitions/Create User Error"
+            }
+          }
+        },
+        "security": []
+      }
+    },
+
+    "/users/{id}": {
+      "put": {
+        "tags": ["Users"],
+        "summary": "Updated an existing user from database.",
+        "description": "Only admin users can update a user. Requires authentication. I chose not to validade role neither password updates to avoid complexity.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "User id.",
+            "required": true,
+            "type": "string",
+            "minimum": 1
+          },
+          {
+            "in": "body",
+            "name": "JSON",
+            "description": "Contains a JSON with parameters to update a user.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Update User"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Returns 204 no content."
+          },
+          "401": {
+            "description": "Only admin users can update a user's role.",
+            "schema": {
+              "$ref": "#/definitions/Update User Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete an existing user from database.",
+        "description": "Only admin users can disable a user. Requires authentication. I chose not to validade role neither password updates to avoid complexity.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "User id.",
+            "required": true,
+            "type": "string",
+            "minimum": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Returns 204 no content."
+          },
+          "401": {
+            "description": "Only a admin can disable a user.",
+            "schema": {
+              "$ref": "#/definitions/Delete User Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    }
+  }
+}
