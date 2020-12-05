@@ -3,16 +3,16 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import * as HttpStatus from 'http-status-codes';
 import swaggerUi from 'swagger-ui-express';
-import * as swaggerDocument from '../swagger.json';
+import * as swaggerDocument from '../swagger_output.json';
 import routes from './routes';
 import AppError from './errors/AppError';
 import './database';
 
 const app = express();
 
-app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cors());
 app.use(express.json());
+app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(routes);
 
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
