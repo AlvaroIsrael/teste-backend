@@ -1,12 +1,11 @@
 import AppError from '../errors/AppError';
-import CreateUserService from '../services/CreateUserService';
-import '../database';
+import FakeCreateUserService from '../services/Fakes/FakeCreateUserService';
 
 describe('Create User Service', () => {
   it('Should be able to create a new user.', async () => {
-    const createUserService = new CreateUserService();
+    const fakeCreateUserService = new FakeCreateUserService();
 
-    const user = await createUserService.execute({
+    const user = await fakeCreateUserService.execute({
       name: 'alvaro',
       email: 'teste@teste.com',
       password: 'mystrongpassword',
@@ -18,17 +17,17 @@ describe('Create User Service', () => {
   });
 
   it('Should not be able to create a new user if the email is already taken.', async () => {
-    const createUserService = new CreateUserService();
+    const fakeCreateUserService = new FakeCreateUserService();
 
     try {
-      const user1 = await createUserService.execute({
+      await fakeCreateUserService.execute({
         name: 'alvaro',
         email: 'teste@teste.com',
         password: 'mystrongpassword',
         role: 'admin',
       });
 
-      const user2 = await createUserService.execute({
+      await fakeCreateUserService.execute({
         name: 'alvaro',
         email: 'teste@teste.com',
         password: 'mystrongpassword',
