@@ -3,17 +3,17 @@ import Movie from '../models/Movie';
 import AppError from '../errors/AppError';
 
 interface IRequest {
-  title: string,
-  director: string,
-  genres: string,
-  actors: string,
-  plot: string,
-  language: string,
-  country: string
+  title: string;
+  director: string;
+  genres: string;
+  actors: string;
+  plot: string;
+  language: string;
+  country: string;
 }
 
 class CreateUserService {
-  public async execute({ title, director, genres, actors, plot, language, country }: IRequest): Promise<Movie> {
+  public execute = async ({ title, director, genres, actors, plot, language, country }: IRequest): Promise<Movie> => {
     const movieRepository = getRepository(Movie);
 
     const movieExists = await movieRepository.findOne({
@@ -25,13 +25,19 @@ class CreateUserService {
     }
 
     const movie = movieRepository.create({
-      title, director, genres, actors, plot, language, country,
+      title,
+      director,
+      genres,
+      actors,
+      plot,
+      language,
+      country,
     });
 
     await movieRepository.save(movie);
 
     return movie;
-  }
+  };
 }
 
 export default CreateUserService;

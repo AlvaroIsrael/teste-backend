@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import CreateUserService from '../services/CreateUserService';
 import * as StatusCodes from 'http-status-codes';
 import { getRepository } from 'typeorm';
+import CreateUserService from '../services/CreateUserService';
 import User from '../models/User';
 import ensureAuthenticated from '../middleares/ensureAuthenticated';
 import UpdateUserService from '../services/UpdateUserService';
@@ -24,7 +24,7 @@ usersRouter.post('/', async (request, response) => {
 
 /* Updates a user. */
 usersRouter.put('/:id', ensureAuthenticated, async (request, response) => {
-  const id = request.params.id;
+  const { id } = request.params;
   const currentUserRole = request.user.role;
   const { name, email, password, role } = request.body;
 
@@ -44,9 +44,9 @@ usersRouter.put('/:id', ensureAuthenticated, async (request, response) => {
 
 /* Deletes a user. */
 usersRouter.delete('/:id', ensureAuthenticated, async (request, response) => {
-  const id = request.params.id;
+  const { id } = request.params;
 
-  if (!(request.user.role == 'admin')) {
+  if (!(request.user.role === 'admin')) {
     return response.status(StatusCodes.UNAUTHORIZED).json({ erro: 'Only a admin can disable a user.' });
   }
 

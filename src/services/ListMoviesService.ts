@@ -1,6 +1,6 @@
+import { getCustomRepository } from 'typeorm';
 import Movie from '../models/Movie';
 import MoviesRepository from '../repositories/MoviesRepository';
-import { getCustomRepository } from 'typeorm';
 
 interface IRequest {
   director: string | undefined;
@@ -10,16 +10,13 @@ interface IRequest {
 }
 
 class ListMoviesService {
-
-  public async execute({ director, title, genres, actors }: IRequest): Promise<Movie[] | null> {
-    let movies: Movie[] | null;
-
+  public execute = async ({ director, title, genres, actors }: IRequest): Promise<Movie[] | null> => {
     const moviesRepository = getCustomRepository(MoviesRepository);
 
-    movies = await moviesRepository.findMovie({ director, title, genres, actors });
+    const movies = await moviesRepository.findMovie({ director, title, genres, actors });
 
     return movies;
-  }
+  };
 }
 
 export default ListMoviesService;

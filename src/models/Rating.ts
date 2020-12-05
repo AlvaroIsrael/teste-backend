@@ -3,7 +3,10 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn, PrimaryColumn, ManyToOne, JoinColumn,
+  UpdateDateColumn,
+  PrimaryColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import User from './User';
 import Movie from './Movie';
@@ -15,12 +18,14 @@ class Rating {
 
   @PrimaryColumn()
   user_id?: string;
+
   @ManyToOne(() => User, user => user.ratings)
   @JoinColumn({ name: 'user_id' })
   user: User;
 
   @PrimaryColumn()
   movie_id?: string;
+
   @ManyToOne(() => Movie, movie => movie.ratings)
   @JoinColumn({ name: 'movie_id' })
   movie: Movie;

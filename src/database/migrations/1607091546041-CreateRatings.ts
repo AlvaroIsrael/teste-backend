@@ -1,8 +1,7 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export default class CreateRatings1607091546041 implements MigrationInterface {
-
-  public async up(queryRunner: QueryRunner): Promise<void> {
+  public up = async (queryRunner: QueryRunner): Promise<void> => {
     await queryRunner.createTable(
       new Table({
         name: 'ratings',
@@ -39,9 +38,9 @@ export default class CreateRatings1607091546041 implements MigrationInterface {
         ],
       }),
     );
-  }
+  };
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
+  public down = async (queryRunner: QueryRunner): Promise<void> => {
     await queryRunner.dropTable('ratings');
-  }
+  };
 }

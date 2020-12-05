@@ -2,11 +2,11 @@ import 'reflect-metadata';
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import * as HttpStatus from 'http-status-codes';
+import swaggerUi from 'swagger-ui-express';
+import * as swaggerDocument from '../swagger.json';
 import routes from './routes';
 import AppError from './errors/AppError';
 import './database';
-import swaggerUi from 'swagger-ui-express';
-import * as swaggerDocument from '../swagger.json';
 
 const app = express();
 

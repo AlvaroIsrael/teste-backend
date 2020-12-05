@@ -1,14 +1,13 @@
 import { getRepository } from 'typeorm';
 import AppError from '../errors/AppError';
 import Rating from '../models/Rating';
-import User from '../models/User';
 import Movie from '../models/Movie';
 
 interface IRequest {
-  userId: string,
-  movieId: string,
-  userRole: string,
-  score: number,
+  userId: string;
+  movieId: string;
+  userRole: string;
+  score: number;
 }
 
 const between = (x: number, min: number, max: number) => {
@@ -16,8 +15,8 @@ const between = (x: number, min: number, max: number) => {
 };
 
 class RateMovieService {
-  public async execute({ userId, userRole, movieId, score }: IRequest): Promise<Rating> {
-    if (!(userRole != 'admin')) {
+  public execute = async ({ userId, userRole, movieId, score }: IRequest): Promise<Rating> => {
+    if (!(userRole !== 'admin')) {
       throw new AppError('Only a default users can rate a movie.');
     }
 
@@ -50,7 +49,7 @@ class RateMovieService {
     delete rating.updated_at;
 
     return rating;
-  }
+  };
 }
 
 export default RateMovieService;

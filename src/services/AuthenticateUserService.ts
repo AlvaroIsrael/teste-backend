@@ -1,23 +1,22 @@
 import { getRepository } from 'typeorm';
+import { sign } from 'jsonwebtoken';
+import { compare } from 'bcryptjs';
 import User from '../models/User';
 import AppError from '../errors/AppError';
-import { compare } from 'bcryptjs';
-import { sign } from 'jsonwebtoken';
 import authConfig from '../config/auth';
 
 interface IRequest {
-  email: string,
-  password: string,
+  email: string;
+  password: string;
 }
 
 interface IResponse {
-  user: User,
-  token: string,
+  user: User;
+  token: string;
 }
 
 class AuthenticateUserService {
-  public async execute({ email, password }: IRequest): Promise<IResponse> {
-
+  public execute = async ({ email, password }: IRequest): Promise<IResponse> => {
     const usersRepository = getRepository(User);
 
     const user = await usersRepository.findOne({ where: { email } });
@@ -34,16 +33,19 @@ class AuthenticateUserService {
 
     const { secret, expiresIn } = authConfig.jwt;
 
-    const token = sign({
+    const token = sign(
+      {
         role: user.role,
       },
-      secret, {
+      secret,
+      {
         subject: user.id,
         expiresIn,
-      });
+      },
+    );
 
     return { user, token };
-  }
+  };
 }
 
 export default AuthenticateUserService;

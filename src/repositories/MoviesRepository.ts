@@ -1,5 +1,5 @@
-import Movie from '../models/Movie';
 import { EntityRepository, Repository } from 'typeorm';
+import Movie from '../models/Movie';
 
 interface IRequest {
   director: string | undefined;
@@ -11,7 +11,6 @@ interface IRequest {
 @EntityRepository(Movie)
 class UsersRepository extends Repository<Movie> {
   public async findMovie({ director, title, genres, actors }: IRequest): Promise<Movie[] | null> {
-
     /* This is just a 'hack' to remove undefined properties from an object. */
     const where = JSON.parse(JSON.stringify({ director, title, genres, actors }));
 
@@ -21,20 +20,20 @@ class UsersRepository extends Repository<Movie> {
     });
 
     moviesFound.forEach(movie => {
-      let total: number = 0;
+      let total = 0;
 
       if (!(movie.ratings === undefined)) {
-        for (let i = 0; i < movie.ratings.length; i++) {
+        for (let i = 0; i < movie.ratings.length; i += 1) {
           total += parseFloat((movie.ratings[i].score ?? 0).toString());
         }
 
-        const average = (total / movie.ratings.length);
+        const average = total / movie.ratings.length;
 
         delete movie.ratings;
         delete movie.created_at;
         delete movie.updated_at;
 
-        movie.average = isNaN(average) ? 0 : average;
+        movie.average = Number.isNaN(average) ? 0 : average;
       }
     });
 

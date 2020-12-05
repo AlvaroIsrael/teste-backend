@@ -1,13 +1,13 @@
 import { Router } from 'express';
-import RateMovieService from '../services/RateMovieService';
 import * as StatusCodes from 'http-status-codes';
+import RateMovieService from '../services/RateMovieService';
 import ensureAuthenticated from '../middleares/ensureAuthenticated';
 
 const ratingsRouter = Router();
 
 /* Inserts a new movie into database. */
 ratingsRouter.post('/:score', ensureAuthenticated, async (request, response) => {
-  const score = request.params.score;
+  const { score } = request.params;
   const userRole = request.user.role;
   const userId = request.user.id;
   const { movieId } = request.body;
@@ -21,7 +21,7 @@ ratingsRouter.post('/:score', ensureAuthenticated, async (request, response) => 
 
     return response.status(StatusCodes.OK).json(movie);
   } catch (e) {
-    if (e.message == 'Only a default users can rate a movie.') {
+    if (e.message === 'Only a default users can rate a movie.') {
       return response.status(StatusCodes.UNAUTHORIZED).json({ erro: e.message });
     }
     return response.status(StatusCodes.BAD_REQUEST).json({ erro: e.message });

@@ -19,7 +19,6 @@ sessionsRouter.post('/', async (request, response) => {
   } catch (e) {
     return response.status(StatusCodes.BAD_REQUEST).json({ erro: e.message });
   }
-
 });
 
 export default sessionsRouter;
