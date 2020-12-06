@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import usersRouter from './users.routes';
-import sessionsRouter from './sessios.routes';
+import sessionsRouter from './sessions.routes';
 import moviesRouter from './movies.routes';
 import ratingsRouter from './ratings.routes';
 

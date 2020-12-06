@@ -148,6 +148,42 @@
       }
     },
 
+    "Authenticate User": {
+      "required": ["email", "password"],
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "moltendrifter@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "mysupersecurepassword"
+        }
+      }
+    },
+
+    "Authenticated User": {
+      "required": ["user", "token"],
+      "properties": {
+        "user": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string", "example": "688da90c-e775-4161-a7e9-2b166686bf0e" },
+            "name": { "type": "string", "example": "Moltendrifter Guardian" },
+            "email": { "type": "string", "example": "moltendrifter@gmail.com" },
+            "role": { "type": "string", "example": "admin" },
+            "active": { "type": "string", "example": "1" },
+            "created_at": { "type": "string", "example": "2020-12-05T03:03:20.567Z" },
+            "updated_at": { "type": "string", "example": "2020-12-05T03:03:20.567Z" }
+          }
+        },
+        "token": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2MDcyMTIzMTMsImV4cCI6MTYwNzI5ODcxMywic3ViIjoiNjg4ZGE5MGMtZTc3NS00MTYxLWE3ZTktMmIxNjY2ODZiZjBlIn0._Tr77V5REBmhAXymzZhjeVotoOc7ob9TWCgSl-XUH8k"
+        }
+      }
+    },
+
     "Update User": {
       "required": ["name", "password", "role"],
       "properties": {
@@ -202,6 +238,15 @@
         "erro": {
           "type": "string",
           "example": "Only a admin can disable a user."
+        }
+      }
+    },
+
+    "Authenticate User Error": {
+      "properties": {
+        "erro": {
+          "type": "string",
+          "example": "Incorrect email or password."
         }
       }
     },
@@ -363,6 +408,40 @@
             "JWT": []
           }
         ]
+      }
+    },
+
+    "/sessions": {
+      "post": {
+        "tags": ["Sessions"],
+        "summary": "Authenticates a user and returns a JWT token if the user is allowed into the system.",
+        "description": "Returns a JWT token if the user is allowed into the system.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "JSON",
+            "description": "Contains a JSON with user mail and password.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Authenticate User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a JSON with the JWT token for the authenticated user.",
+            "schema": {
+              "$ref": "#/definitions/Authenticated User"
+            }
+          },
+          "400": {
+            "description": "Only users with correct combination of email and password can authenticate.",
+            "schema": {
+              "$ref": "#/definitions/Authenticate User Error"
+            }
+          }
+        },
+        "security": []
       }
     }
   }
