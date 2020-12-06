@@ -8,11 +8,8 @@
   "scripts": {
     "build": "tsc",
     "dev:server": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
-    "knex:seed": "npx knex seed:run --knexfile knexfile.ts",
-    "knex:migrate": "npx knex migrate:latest --knexfile knexfile.ts",
     "test": "jest --coverage --watchAll=false",
-    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
-    "swagger": "npx swaggerGen -c ./swaggerConfig.json -p ./tsconfig.json"
+    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -20,10 +17,8 @@
     "express": "^4.17.1",
     "http-status-codes": "^1.4.0",
     "jsonwebtoken": "^8.5.1",
-    "knex": "^0.21.9",
     "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
-    "sqlite3": "^5.0.0",
     "swagger-jsdoc": "^6.0.0-rc.3",
     "swagger-ui-express": "^4.1.5",
     "typeorm": "^0.2.29",
