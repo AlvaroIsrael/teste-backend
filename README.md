@@ -22,6 +22,7 @@
 - [ExpressJs](https://expressjs.com/)
 - [JestJs](https://jestjs.io/)
 - [PostgreSql](https://www.postgresql.org/)
+- [TypeORM](https://typeorm.io/)
 
 ## 💻 Como rodar?
 
