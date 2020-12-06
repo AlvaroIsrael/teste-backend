@@ -1,6 +1,6 @@
 <h1 align="center">
     👨🏻‍🎥 IMDB api<br>
-    <img  alt="IMDb api" width="1024" height="1033" src=""/>
+    <img  alt="IMDb api" width="1024" height="1033" src="https://github.com/AlvaroIsrael/teste-backend/blob/master/src/img/swagger-api.png"/>
 </h1>
 
 ## 📌 Sobre esse projeto
