@@ -44,7 +44,7 @@ moviesRouter.get('/', async (request, response) => {
 
   const movies = await listMovies.execute({ director, title, genres, actors });
 
-  return response.status(200).json(movies);
+  return response.status(StatusCodes.OK).json(movies);
 });
 
 export default moviesRouter;

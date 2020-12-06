@@ -1,16 +1,16 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "Imdb api.",
     "version": "0.1.0",
     "title": "Imdb Api",
+    "description": "A movie api for IMDb. This was part of a code challenge given to me by ioasys enterprise as part of their recrutment process. Please dont forget to provide Bearer jwt token using 'Authorize' button before testing any locked endpoint which requires authentication.",
     "termsOfService": "https://github.com/AlvaroIsrael/teste-backend/blob/master/README.md",
     "contact": {
       "email": "israel.nunes.leite@gmail.com"
     },
     "license": {
       "name": "MIT",
-      "url": "https://github.com/AlvaroIsrael/teste-backend/blob/master/LICENCE.md"
+      "url": "https://opensource.org/licenses/MIT"
     }
   },
   "securityDefinitions": {
@@ -66,6 +66,48 @@
         "updated_at": {
           "type": "string",
           "example": "2020-12-05T23:39:15.672Z"
+        }
+      }
+    },
+
+    "Movie List": {
+      "required": ["id", "title", "director", "genres", "actors", "plot", "language", "country", "average"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "33a8363e-43a6-4b18-b4c5-1e4a7005d804"
+        },
+        "title": {
+          "type": "string",
+          "example": "Avengers: Endgame"
+        },
+        "director": {
+          "type": "string",
+          "example": "Anthony Russo, Joe Russo"
+        },
+        "genres": {
+          "type": "string",
+          "example": "Action, Adventure, Fantasy, Sci-Fi"
+        },
+        "actors": {
+          "type": "string",
+          "example": "Bradley Cooper, Brie Larson, Chris Hemsworth"
+        },
+        "plot": {
+          "type": "string",
+          "example": "After the devastating events of Avengers: Infinity War, the universe is in ruins."
+        },
+        "language": {
+          "type": "string",
+          "example": "English"
+        },
+        "country": {
+          "type": "string",
+          "example": "USA"
+        },
+        "average": {
+          "type": "number",
+          "example": 2.175
         }
       }
     },
@@ -180,6 +222,34 @@
         "token": {
           "type": "string",
           "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2MDcyMTIzMTMsImV4cCI6MTYwNzI5ODcxMywic3ViIjoiNjg4ZGE5MGMtZTc3NS00MTYxLWE3ZTktMmIxNjY2ODZiZjBlIn0._Tr77V5REBmhAXymzZhjeVotoOc7ob9TWCgSl-XUH8k"
+        }
+      }
+    },
+
+    "Create Movie Score": {
+      "required": ["movieId"],
+      "properties": {
+        "movieId": {
+          "type": "string",
+          "example": "7ee04c69-eb7f-4d15-8f6e-3c59fd471829"
+        }
+      }
+    },
+
+    "Movie Score": {
+      "required": ["id", "score", "created_at"],
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 2.7
+        },
+        "score": {
+          "type": "string",
+          "example": "01c19626-dd83-4c7d-aea4-3fb1b094c03b"
+        },
+        "created_at": {
+          "type": "string",
+          "example": "2020-12-05T02:06:47.967Z"
         }
       }
     },
@@ -300,6 +370,59 @@
             "JWT": []
           }
         ]
+      },
+
+      "get": {
+        "tags": ["Movies"],
+        "summary": "Returns a list of one or more movies from the database.",
+        "description": "Parameters are optional, but they expect a single string, even if there are more than one option. I chose not to add extra complexity to the code by spliting parameters.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "director",
+            "description": "A string separated by comma, and without quotes, with one or more movie directors.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "title",
+            "description": "A string without quotes, with one movie title.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "genres",
+            "description": "A string separated by comma, and without quotes, with one or more movie genres.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "actors",
+            "description": "A string separated by comma, and without quotes, with one or more movie actors.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a JSON with a list of movies matching the query params. The logic is AND based, which means, all query paramn must match to the endpoint return a value.",
+            "schema": {
+              "$ref": "#/definitions/Movie List"
+            }
+          }
+        },
+        "security": []
       }
     },
 
@@ -442,6 +565,53 @@
           }
         },
         "security": []
+      }
+    },
+
+    "/ratings/{score}": {
+      "post": {
+        "tags": ["Ratings"],
+        "summary": "Register a score from a user to a given movie.",
+        "description": "Votes can only contain numbers between 0 and 4. Only default users can vote. Requires authetication.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "score",
+            "description": "Movie score given by a default user.",
+            "required": true,
+            "type": "string",
+            "minimum": 0,
+            "maximum": 4
+          },
+          {
+            "in": "body",
+            "name": "JSON",
+            "description": "Contains a JSON with movie id.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Create Movie Score"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a JSON with the registered score.",
+            "schema": {
+              "$ref": "#/definitions/Movie Score"
+            }
+          },
+          "400": {
+            "description": "Only users with correct combination of email and password can authenticate.",
+            "schema": {
+              "$ref": "#/definitions/Missing Jwt"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     }
   }
